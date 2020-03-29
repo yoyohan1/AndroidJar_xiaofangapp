@@ -67,7 +67,8 @@ public class MainActivity extends UnityPlayerActivity {
     private int NotchState = 0;// 0AndroidO  1AndroidP全面屏  2AndroidP非全面屏
 
     public void AutoSetStatusBar() {
-        if (Build.VERSION.SDK_INT >= 28) {
+        //安卓10.0以上 状态栏的黑边背景调不出来。所以适配AndroidQ的非刘海屏手机 开启全屏模式。刘海屏手机开启状态栏黑边模式
+        if (Build.VERSION.SDK_INT >= 29) {
             UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
