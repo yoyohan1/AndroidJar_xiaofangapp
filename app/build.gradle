@@ -17,13 +17,13 @@ android {
     }
     android.libraryVariants.all { variant ->
         variant.outputs.all {
-            def fileName = "xiaofangapp.aar"
+            def fileName = "xiaofangapp-mainactivity.aar"
             outputFileName = fileName
         }
     }
 }
 
 dependencies {
-    //implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly files('libs/unity-classes.jar')
 }

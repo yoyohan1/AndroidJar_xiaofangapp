@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.yoyohan.xiaofangapp.yxapi;
+package com.youlu.xiaofangapp.yxapi;
 
 import cn.sharesdk.yixin.utils.YXMessage;
 import cn.sharesdk.yixin.utils.YixinHandlerActivity;

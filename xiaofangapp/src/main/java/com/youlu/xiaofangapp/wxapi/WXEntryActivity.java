@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.yoyohan.xiaofangapp.wxapi;
+package com.youlu.xiaofangapp.wxapi;
 
 import android.content.Intent;
 import android.widget.Toast;

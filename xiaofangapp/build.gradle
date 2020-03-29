@@ -28,7 +28,6 @@ android {
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly files('libs/com.youlu.xiaofangapp.jar')
-    compileOnly files('libs/ShareSDK-Wechat-core-3.6.8.jar')
-    compileOnly files('libs/ShareSDK-Yixin-core-3.6.8.jar')
+    compileOnly files('libs/ShareSDK-Wechat-Core-3.6.8.jar')
+    compileOnly files('libs/ShareSDK-Yixin-Core-3.6.8.jar')
 }
