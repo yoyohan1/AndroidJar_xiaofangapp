@@ -4,15 +4,14 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.unity3d.player.UnityPlayer;
-import com.unity3d.player.UnityPlayerActivity;
-
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+
+import com.unity3d.player.UnityPlayer;
+import com.unity3d.player.UnityPlayerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,6 +101,7 @@ public class MainActivity extends UnityPlayerActivity {
                         }
                         Log.i("Unity", "是刘海屏！");
                         setStatusBar(1);
+                        //SendMessageToUnity(3, displayCutout.getSafeInsetTop() + "", 0);
                     }
                 }
             });
@@ -118,40 +118,18 @@ public class MainActivity extends UnityPlayerActivity {
         ShowStatusBar();
     }
 
-
     public void ShowStatusBar() {
         Log.i("Unity", "ShowStatusBar!   当前NotchState：" + NotchState);
 
-        // 0AndroidO  1AndroidP全面屏  2AndroidP非全面屏
-        if (NotchState == 2) {
-            return;
-        }
-
-        UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                UnityPlayer.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, -1);
-                UnityPlayer.currentActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-            }
-        });
+        this.getWindow().clearFlags(1024);
+        this.mUnityPlayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
-
-
+    
     public void HideStatusBar() {
         Log.i("Unity", "HideStatusBar!   当前NotchState：" + NotchState);
 
-        // 0AndroidO  1AndroidP全面屏  2AndroidP非全面屏
-        if (NotchState == 2) {
-            return;
-        }
-
-        UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                UnityPlayer.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, -1);
-                UnityPlayer.currentActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-            }
-        });
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.mUnityPlayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
 

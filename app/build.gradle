@@ -26,4 +26,5 @@ android {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly files('libs/unity-classes.jar')
+    compileOnly files('libs/unityShowAndroidStatusBar.aar')
 }

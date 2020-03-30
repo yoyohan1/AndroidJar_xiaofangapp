@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="UnityThemeSelector_Dark" parent="BaseUnityTheme_Dark">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="BaseUnityTheme_Dark" parent="android:Theme.Holo.NoActionBar.Fullscreen"></style>
+</resources>
