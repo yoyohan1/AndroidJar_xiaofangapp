@@ -1,5 +1,6 @@
 package com.youlu.xiaofangapp;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -121,15 +122,31 @@ public class MainActivity extends UnityPlayerActivity {
     public void ShowStatusBar() {
         Log.i("Unity", "ShowStatusBar!   当前NotchState：" + NotchState);
 
-        this.getWindow().clearFlags(1024);
-        this.mUnityPlayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        final UnityPlayer mUnityPlayer_final = this.mUnityPlayer;
+        final Activity this_final = this;
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                this_final.getWindow().clearFlags(1024);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            }
+        });
+
     }
-    
+
     public void HideStatusBar() {
         Log.i("Unity", "HideStatusBar!   当前NotchState：" + NotchState);
 
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.mUnityPlayer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        final UnityPlayer mUnityPlayer_final = this.mUnityPlayer;
+        final Activity this_final = this;
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            }
+        });
+
     }
 
 
