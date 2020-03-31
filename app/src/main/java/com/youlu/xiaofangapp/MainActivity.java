@@ -128,7 +128,7 @@ public class MainActivity extends UnityPlayerActivity {
             @Override
             public void run() {
                 this_final.getWindow().clearFlags(1024);
-                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }
         });
 
@@ -143,7 +143,7 @@ public class MainActivity extends UnityPlayerActivity {
             @Override
             public void run() {
                 this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
             }
         });
 
