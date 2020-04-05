@@ -21,11 +21,6 @@ android {
             outputFileName = fileName
         }
     }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
 
 dependencies {
