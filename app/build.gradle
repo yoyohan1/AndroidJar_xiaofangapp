@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 28
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -21,10 +21,33 @@ android {
             outputFileName = fileName
         }
     }
+
+    repositories {
+        google()
+        jcenter()
+    }
 }
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly files('libs/unity-classes.jar')
-    compileOnly files('libs/unityShowAndroidStatusBar.aar')
 }
+
+
+
+
+task makeJar(type: Jar){
+    //删除 旧的.jar包 任务
+    delete('build/libs/xiaofangapp-mainactivity.jar')
+    //指定生成的jar名
+    baseName 'xiaofangapp-mainactivity'
+    //从哪里打包class文件
+    from('build/intermediates/classes/release/com/youlu/xiaofangapp/')
+    //打包到jar后的目录结构
+    into('com/youlu/xiaofangapp/')
+    //去掉不需要打包的目录和文件
+    exclude('BuildConfig.class','R.class')
+    //去掉R$开头的文件
+    exclude{it.name.startsWith('R$')}
+}
+makeJar.dependsOn(build)
