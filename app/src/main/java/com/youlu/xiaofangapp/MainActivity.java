@@ -127,8 +127,13 @@ public class MainActivity extends UnityPlayerActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                this_final.getWindow().clearFlags(1024);
-                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                if (Build.VERSION.SDK_INT >= 29) {
+                    this_final.getWindow().clearFlags(1024);
+                    mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                } else {
+                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, -1);
+                }
+                //this_final.getWindow().addFlags(2048);
             }
         });
 
@@ -142,8 +147,13 @@ public class MainActivity extends UnityPlayerActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                if (Build.VERSION.SDK_INT >= 29) {
+                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                } else {
+                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, -1);
+                }
+                //this_final.getWindow().clearFlags(2048);
             }
         });
 
