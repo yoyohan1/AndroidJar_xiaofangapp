@@ -1,9 +1,12 @@
 package com.youlu.xiaofangapp;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 import android.view.DisplayCutout;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.unity3d.player.UnityPlayerActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends UnityPlayerActivity {
@@ -48,7 +52,7 @@ public class MainActivity extends UnityPlayerActivity {
      * requestId 发送的请求ID Unity根据此值判断做出响应
      * msg 消息体 Json格式
      */
-    public void SendMessageToUnity(int requestId, String msg, int code) {
+    public static void SendMessageToUnity(int requestId, String msg, int code) {
         Log.i("Unity", "SendMessageToUnity调用成功！requestId:" + requestId + " msg:" + msg + " code:" + code);
 
         JSONObject jsonObject = new JSONObject();
@@ -127,13 +131,15 @@ public class MainActivity extends UnityPlayerActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= 29) {
-                    this_final.getWindow().clearFlags(1024);
-                    mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                } else {
-                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, -1);
-                }
-                //this_final.getWindow().addFlags(2048);
+                this_final.getWindow().clearFlags(1024);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+
+                //this_final.getWindow().clearFlags(2048);
+//                if (Build.VERSION.SDK_INT >= 29) {
+//                } else {
+//                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, -1);
+//                }
+
             }
         });
 
@@ -147,16 +153,62 @@ public class MainActivity extends UnityPlayerActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= 29) {
-                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-                } else {
-                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, -1);
-                }
-                //this_final.getWindow().clearFlags(2048);
+                this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                mUnityPlayer_final.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+//                if (Build.VERSION.SDK_INT >= 29) {
+//                } else {
+//                    this_final.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, -1);
+//                }
+                //this_final.getWindow().addFlags(2048);
+
             }
         });
 
+    }
+
+
+    public long GetFreeDiskSpace() {
+        //8.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.i("Unity", "使用安卓8.0以上的处理方法------------------------------");
+            long size = StorageQueryUtil.queryWithStorageManager(mUnityPlayer.getContext());
+            Log.i("Unity", "获取到容量StorageQueryUtil.queryWithStorageManager:" + size);
+            if (size == -1) {
+                return size;
+            }
+            long size2 = size / (1000 * 1000);
+            long size3 = (long) (size * 1.0 / (1024 * 1024));
+            Log.i("Unity", "获取到容量StorageQueryUtil.queryWithStorageManager 除以1000*1000:" + size2);
+            Log.i("Unity", "获取到容量StorageQueryUtil.queryWithStorageManager 除以1024*1024:" + size3);
+            return size2;
+        } else {
+            try {
+                File file = Environment.getDataDirectory();
+                StatFs sf = new StatFs(file.getPath());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    Log.i("Unity", "GetFreeDiskSpace !   设备大于Android4.3 获取结果：" + (long) (sf.getAvailableBytes() * 1.0 / (1024 * 1024)) + "  Total:" + sf.getTotalBytes() / (1024 * 1024) + "  Free:" + (long) (sf.getFreeBytes() * 1.0 / (1024 * 1024)));
+                    return (long) (sf.getAvailableBytes() * 1.0 / (1024 * 1024));
+                } else {
+                    StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
+                    //存储块
+                    long blockCount = statFs.getBlockCount();
+                    //块大小
+                    long blockSize = statFs.getBlockSize();
+                    //可用块数量
+                    long availableCount = statFs.getAvailableBlocks();
+                    //剩余块数量，注：这个包含保留块（including reserved blocks）即应用无法使用的空间
+                    long freeBlocks = statFs.getFreeBlocks();
+
+                    long size = (long) (blockSize * availableCount * 1.0 / (1024 * 1024));
+                    Log.i("Unity", "GetFreeDiskSpace !   设备小于Android4.3 获取结果：" + size);
+                    return size;
+                }
+            } catch (Throwable e) {
+                Log.i("Unity", "GetFreeDiskSpace Error!   " + e.getLocalizedMessage());
+            }
+            return -1;
+        }
     }
 
 
