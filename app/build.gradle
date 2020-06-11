@@ -26,9 +26,23 @@ android {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly files('libs/unity-classes.jar')
+    implementation(name: 'alicloud-android-push-3.1.9.1', ext: 'aar')
+    implementation files('libs/alicloud-android-sdk-beacon-1.0.3.jar')
+    implementation files('libs/alicloud-android-ut-5.4.3.jar')
+    implementation files('libs/alicloud-android-utils-1.1.5.jar')
+    implementation files('libs/alicloud-android-utdid-1.5.2.jar')
+    compileOnly files('libs/MobCommons-2019.0925.1537.jar')
+    compileOnly files('libs/MobTools-2019.0925.1537.jar')
 }
 
 
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'libs'//this way we can find the .aar file in libs folder
+        }
+    }
+}
 
 
 task makeJar(type: Jar){

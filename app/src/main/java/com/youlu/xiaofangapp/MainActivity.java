@@ -2,7 +2,12 @@ package com.youlu.xiaofangapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Region;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,14 +19,23 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.unity3d.player.UnityPlayer;
 import com.unity3d.player.UnityPlayerActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends UnityPlayerActivity {
     @Override
@@ -208,6 +222,50 @@ public class MainActivity extends UnityPlayerActivity {
                 Log.i("Unity", "GetFreeDiskSpace Error!   " + e.getLocalizedMessage());
             }
             return -1;
+        }
+    }
+
+    public static List<Map<String, Object>> lisNoSendMsg = new ArrayList<>();
+    public static String noSendNotification = "";
+
+    public String getLisNoSendMsg() {
+        Log.i("Unity", "开始getLisNoSendMsg");
+        JSONArray jsonArray = new JSONArray(lisNoSendMsg);
+        lisNoSendMsg.clear();
+        Log.i("Unity", "getLisNoSendMsg结果为：" + jsonArray.toString());
+        return jsonArray.toString();
+    }
+
+    public String getNoSendNotification() {
+        Log.i("Unity", "开始getNoSendNotification");
+        String returnStr = noSendNotification;
+        noSendNotification = "";
+        Log.i("Unity", "getNoSendNotification结果为：" + returnStr);
+        return returnStr;
+    }
+
+
+    public static void SendPushToUnity(int requestId, JSONObject jsonObject, int code) {
+        if (UnityPlayer.currentActivity == null) {
+            Log.i("Unity", "无法SendPushToUnity！Activity没启动！把数据存储一下！");
+
+            //未发送给Unity的通知
+            if (requestId == 3) {
+                noSendNotification = jsonObject.toString();
+            }
+            //未发送给Unity的消息
+            else if (requestId == 4) {
+                Map<String, Object> map = new HashMap<>();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                map.put("date", formatter.format(new Date()));
+                map.put("requestId", requestId);
+                map.put("msg", jsonObject);
+                map.put("code", code);
+                lisNoSendMsg.add(map);
+            }
+
+        } else {
+            SendMessageToUnity(requestId, jsonObject.toString(), code);
         }
     }
 
