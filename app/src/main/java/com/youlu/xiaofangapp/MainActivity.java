@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Region;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
@@ -251,7 +255,7 @@ public class MainActivity extends UnityPlayerActivity {
 
             //未发送给Unity的通知
             if (requestId == 3) {
-                noSendNotification = jsonObject.toString();
+                noSendNotification = jsonObject.toString().replace("\\/","/");//解决网址有转义字符进去 例如https:\/\/www.baidu.com
             }
             //未发送给Unity的消息
             else if (requestId == 4) {
@@ -267,6 +271,19 @@ public class MainActivity extends UnityPlayerActivity {
         } else {
             SendMessageToUnity(requestId, jsonObject.toString(), code);
         }
+    }
+
+
+    /*打开兔小巢反馈链接*/
+    public void openTuXiaoCao(final String phone, final String nickname, final String avatar, final String openid) {
+
+        Intent intent = new Intent(this, TuXiaoCaoActivity.class);
+        intent.putExtra("phone", phone);
+        intent.putExtra("nickname", nickname);
+        intent.putExtra("avatar", avatar);
+        intent.putExtra("openid", openid);
+        this.startActivity(intent);
+
     }
 
 
