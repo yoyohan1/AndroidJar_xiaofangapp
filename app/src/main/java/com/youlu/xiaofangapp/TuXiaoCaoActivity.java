@@ -1,5 +1,6 @@
 package com.youlu.xiaofangapp;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,18 +9,23 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.unity3d.player.UnityPlayer;
 
 public class TuXiaoCaoActivity extends Activity {
+
+    private WebView webView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar=getActionBar();
-        actionBar.setTitle("返回");
+        ActionBar actionBar = getActionBar();
+        actionBar.setTitle("");
         actionBar.setDisplayShowHomeEnabled(false);
         int color = Color.parseColor("#000000");
         ColorDrawable drawable = new ColorDrawable(color);
@@ -31,7 +37,7 @@ public class TuXiaoCaoActivity extends Activity {
         String openid = this.getIntent().getStringExtra("openid");
 
         setContentView(R.layout.activity_tuxiaocao);
-        WebView webView = (WebView) findViewById(R.id.tuxiaocao);
+        webView = (WebView) findViewById(R.id.tuxiaocao);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);       // 这个要加上
 
@@ -69,6 +75,37 @@ public class TuXiaoCaoActivity extends Activity {
 
         Log.i("Unity", "打开兔小巢页面 postData:" + postData);
         webView.postUrl(url, postData.getBytes());
-
     }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 为ActionBar扩展菜单项
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.tuxiaocao_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.action_exit) {
+            this.finish();
+            return true;
+        } else if (i == R.id.action_back) {
+            if (webView.canGoBack()){
+                webView.goBack();
+            }
+            else{
+                this.finish();
+            }
+            return true;
+        }else if (i == R.id.action_refersh){
+            webView.reload();
+            return true;
+        }
+        else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 搜索, 应该作为动作按钮展示-->
+    <item android:id="@+id/action_back"
+        android:showAsAction="always"
+        android:title="返回"/>
+    <item android:id="@+id/action_refersh"
+        android:showAsAction="always"
+        android:title="刷新"/>
+    <item android:id="@+id/action_exit"
+        android:showAsAction="always"
+        android:title="退出"/>
+    <!--&lt;!&ndash; 设置, 在溢出菜单中展示 &ndash;&gt;-->
+    <!--<item android:id="@+id/action_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--android:showAsAction="never" />-->
+</menu>
