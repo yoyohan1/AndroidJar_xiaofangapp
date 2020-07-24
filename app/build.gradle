@@ -41,6 +41,7 @@ dependencies {
     //为了使用Mob的Application
     compileOnly files('libs/MobCommons-2019.0925.1537.jar')
     compileOnly files('libs/MobTools-2019.0925.1537.jar')
+    compileOnly 'com.google.android:support-v4:r7'
 }
 
 
